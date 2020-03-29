@@ -69,7 +69,7 @@ COPY resources/sudoers /etc/sudoers
 RUN chmod 0440 /etc/sudoers && chown 0:0 /etc/sudoers
 
 # Build Theia IDE
-RUN git clone --branch ${THEIA_IDE_VERSION} https://github.com/eclipse-theia/theia.git
+RUN git clone --branch ${THEIA_IDE_VERSION} https://github.com/denisvasilik/theia.git
 
 COPY apps theia/apps
 COPY resources/.yarnrc theia/app/.yarnrc
