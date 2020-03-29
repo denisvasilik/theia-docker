@@ -37,6 +37,9 @@ RUN apt-get update && \
                        iputils-ping \
                        libfreetype6-dev \
                        sudo \
+                       unzip \ 
+                       wget \
+                       fonts-powerline \
                        apt-transport-https \
                        openjdk-8-jdk && \
     apt-get clean && \
@@ -90,10 +93,13 @@ RUN mkdir -p .fonts && \
     mkdir -p .theia && \
     mkdir -p workspace
 
-# Add fonts
-COPY resources/menlo_for_powerline.ttf .fonts/menlo_for_powerline.ttf
-COPY resources/jetbrains_mono_regular.ttf .fonts/jetbrains_mono_regular.ttf
-RUN fc-cache -v -f
+# Add JetBrains Mono and Menlo for Powerline
+RUN cd .fonts && \
+    wget https://download.jetbrains.com/fonts/JetBrainsMono-1.0.3.zip && \
+    unzip JetBrainsMono-1.0.3.zip && \
+    rm JetBrainsMono-1.0.3.zip && \
+    wget https://github.com/denisvasilik/Menlo-for-Powerline/blob/master/Menlo%20for%20Powerline.ttf && \
+    fc-cache -v -f
 
 # Add VS Code related configurations
 COPY resources/.theia/settings.json .theia/settings.json
