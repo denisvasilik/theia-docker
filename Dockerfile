@@ -3,7 +3,7 @@ ARG ARCH='amd64'
 FROM ${ARCH}/ubuntu:18.04
 
 ARG ARCH='amd64'
-ARG THEIA_IDE_VERSION='v1.0.0'
+ARG THEIA_IDE_VERSION='v1.1.0'
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -37,7 +37,7 @@ RUN apt-get update && \
                        iputils-ping \
                        libfreetype6-dev \
                        sudo \
-                       unzip \ 
+                       unzip \
                        wget \
                        fonts-powerline \
                        apt-transport-https \
@@ -69,7 +69,7 @@ COPY resources/sudoers /etc/sudoers
 RUN chmod 0440 /etc/sudoers && chown 0:0 /etc/sudoers
 
 # Build Theia IDE
-RUN git clone --branch ${THEIA_IDE_VERSION} https://github.com/denisvasilik/theia.git
+RUN git clone --branch ${THEIA_IDE_VERSION} https://github.com/eclipse-theia/theia.git
 
 COPY apps theia/apps
 COPY resources/.yarnrc theia/app/.yarnrc
