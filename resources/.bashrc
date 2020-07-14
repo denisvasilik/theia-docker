@@ -106,6 +106,9 @@ if [[ $TERM != linux && ! $PROMPT_COMMAND =~ _update_ps1 ]]; then
     PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
 fi
 
-export PATH="$PATH:/home/tester/.local/bin"
+export PATH="$PATH:/home/developer/.local/bin"
+
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
 
 DOTNET_CLI_TELEMETRY_OPTOUT=1
