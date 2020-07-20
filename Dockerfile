@@ -41,8 +41,7 @@ RUN apt-get update && \
                        wget \
                        fonts-powerline \
                        apt-transport-https \
-                       openjdk-8-jdk && \
-                       fonts-powerline \
+                       openjdk-8-jdk \
     apt-get clean && \
     rm -rf /var/cache/apt/* && \
     rm -rf /var/lib/apt/lists/* && \
