@@ -107,6 +107,7 @@ if [[ $TERM != linux && ! $PROMPT_COMMAND =~ _update_ps1 ]]; then
 fi
 
 export PATH="$PATH:/home/developer/.local/bin"
+export PATH="$PATH:/home/developer/.cargo/bin"
 
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
