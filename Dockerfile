@@ -42,6 +42,7 @@ RUN apt-get update && \
                        fonts-powerline \
                        apt-transport-https \
                        openjdk-8-jdk && \
+                       fonts-powerline \
     apt-get clean && \
     rm -rf /var/cache/apt/* && \
     rm -rf /var/lib/apt/lists/* && \
@@ -60,7 +61,8 @@ RUN groupadd -g 1000 developer && \
     useradd -u 1000 -g 1000 -ms /bin/bash developer && \
     usermod -a -G sudo developer && \
     usermod -a -G users developer && \
-    echo 'developer:developer' | chpasswd
+    echo 'developer:developer' | chpasswd && \
+    chown developer:developer /home/developer -R
 
 WORKDIR /home/developer
 
@@ -88,17 +90,24 @@ RUN cd theia/apps/ide && \
 
 USER developer
 
+# Install Rust
+RUN curl https://sh.rustup.rs -o install_rustup.sh && \
+    chmod +x install_rustup.sh && \
+    ./install_rustup.sh -y && \
+    . .cargo/env && \
+    rustup toolchain install stable-x86_64-unknown-linux-gnu && \
+    rustup default stable-x86_64-unknown-linux-gnu
+
 # Prepare directory structure
 RUN mkdir -p .fonts && \
     mkdir -p .theia && \
     mkdir -p workspace
 
-# Add JetBrains Mono and Menlo for Powerline
+# Add JetBrains Mono
 RUN cd .fonts && \
     wget https://download.jetbrains.com/fonts/JetBrainsMono-1.0.3.zip && \
     unzip JetBrainsMono-1.0.3.zip && \
     rm JetBrainsMono-1.0.3.zip && \
-    wget https://github.com/denisvasilik/Menlo-for-Powerline/blob/master/Menlo%20for%20Powerline.ttf && \
     fc-cache -v -f
 
 # Add VS Code related configurations
