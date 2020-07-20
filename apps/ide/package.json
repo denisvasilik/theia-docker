@@ -9,7 +9,8 @@
                 "applicationName": "Eclipse Theia",
                 "preferences": {
                     "files.enableTrash": false
-                }
+                },
+                "defaultTheme": "Solarized Dark"
             }
         }
     },
