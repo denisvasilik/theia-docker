@@ -3,14 +3,14 @@ ARG ARCH='amd64'
 FROM ${ARCH}/ubuntu:18.04
 
 ARG ARCH='amd64'
-ARG THEIA_IDE_VERSION='v1.4.0'
+ARG THEIA_IDE_VERSION='v1.5.0'
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install NodeJS
 RUN apt-get update && \
     apt-get install -y curl && \
-    curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get install -y nodejs
 
 # Install .NET core runtime
