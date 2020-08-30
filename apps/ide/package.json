@@ -145,7 +145,7 @@
         "vscode-editorconfig": "https://open-vsx.org/api/EditorConfig/EditorConfig/0.14.4/file/EditorConfig.EditorConfig-0.14.4.vsix",
         "vscode-eslint": "https://open-vsx.org/api/dbaeumer/vscode-eslint/2.1.1/file/dbaeumer.vscode-eslint-2.1.1.vsix",
         "vscode-references-view": "https://open-vsx.org/api/ms-vscode/references-view/0.0.47/file/ms-vscode.references-view-0.0.47.vsix",
-        "vscode-python": "https://github.com/microsoft/vscode-python/releases/download/2020.7.96456/ms-python-release.vsix",
+        "vscode-python": "https://github.com/microsoft/vscode-python/releases/download/2020.8.105045/ms-python-release.vsix",
         "vscode-rust": "https://github.com/rust-lang/vscode-rust/releases/download/v0.7.8/rust.vsix"
     }
 }
