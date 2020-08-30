@@ -1,6 +1,5 @@
 {
     "editor.renderWhitespace": "all",
-    "terminal.integrated.fontFamily": "Consolas",
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,
@@ -17,5 +16,5 @@
     "editor.fontSize": 13,
     "workbench.iconTheme": "theia-file-icons",
     "python.pythonPath": "/usr/bin/python",
-    "workbench.colorTheme": "Solarized Dark"
+    "workbench.colorTheme": "Dark (Visual Studio)"
 }
