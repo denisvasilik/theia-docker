@@ -98,11 +98,10 @@ RUN curl https://sh.rustup.rs -o install_rustup.sh && \
     ./install_rustup.sh -y && \
     . .cargo/env && \
     rustup toolchain install stable-x86_64-unknown-linux-gnu && \
-    rustup default stable-x86_64-unknown-linux-gnu
-
-RUN .cargo/bin/rustup component add rust-analysis --toolchain stable-x86_64-unknown-linux-gnu
-RUN .cargo/bin/rustup component add rust-src --toolchain stable-x86_64-unknown-linux-gnu
-RUN .cargo/bin/rustup component add rls --toolchain stable-x86_64-unknown-linux-gnu
+    rustup default stable-x86_64-unknown-linux-gnu && \
+    .cargo/bin/rustup component add rust-analysis --toolchain stable-x86_64-unknown-linux-gnu && \
+    .cargo/bin/rustup component add rust-src --toolchain stable-x86_64-unknown-linux-gnu && \
+    .cargo/bin/rustup component add rls --toolchain stable-x86_64-unknown-linux-gnu
 
 # Prepare directory structure
 RUN mkdir -p .fonts && \
