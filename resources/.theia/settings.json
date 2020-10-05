@@ -16,5 +16,6 @@
     "editor.fontSize": 13,
     "workbench.iconTheme": "theia-file-icons",
     "python.pythonPath": "/usr/bin/python",
-    "workbench.colorTheme": "Dark (Visual Studio)"
+    "workbench.colorTheme": "Dark (Visual Studio)",
+    "rust-client.rustupPath": "/home/developer/.cargo/bin/rustup"
 }

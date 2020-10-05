@@ -3,7 +3,7 @@ ARG ARCH='amd64'
 FROM ${ARCH}/ubuntu:18.04
 
 ARG ARCH='amd64'
-ARG THEIA_IDE_VERSION='v1.5.0'
+ARG THEIA_IDE_VERSION='v1.6.0'
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -87,6 +87,9 @@ RUN cd theia/apps/ide && \
     yarn theia download:plugins && \
     rm -rf ./ycache
 
+COPY resources/.bashrc /root/.bashrc
+RUN echo 'export PATH="$PATH:/home/developer/.cargo/bin"' >> /root/.profile
+
 USER developer
 
 # Install Rust
@@ -96,6 +99,10 @@ RUN curl https://sh.rustup.rs -o install_rustup.sh && \
     . .cargo/env && \
     rustup toolchain install stable-x86_64-unknown-linux-gnu && \
     rustup default stable-x86_64-unknown-linux-gnu
+
+RUN .cargo/bin/rustup component add rust-analysis --toolchain stable-x86_64-unknown-linux-gnu
+RUN .cargo/bin/rustup component add rust-src --toolchain stable-x86_64-unknown-linux-gnu
+RUN .cargo/bin/rustup component add rls --toolchain stable-x86_64-unknown-linux-gnu
 
 # Prepare directory structure
 RUN mkdir -p .fonts && \
