@@ -2,9 +2,6 @@ ARG ARCH='amd64'
 
 FROM ${ARCH}/ubuntu:18.04
 
-ARG ARCH='amd64'
-ARG THEIA_IDE_VERSION='v1.9.0'
-
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install NodeJS
@@ -79,17 +76,10 @@ WORKDIR /home/developer
 COPY resources/sudoers /etc/sudoers
 RUN chmod 0440 /etc/sudoers && chown 0:0 /etc/sudoers
 
-# Build Theia IDE
-RUN git clone --branch ${THEIA_IDE_VERSION} https://github.com/denisvasilik/theia.git
-
 COPY apps theia/apps
 COPY resources/.yarnrc theia/app/.yarnrc
 COPY resources/package.json theia/package.json
 COPY resources/.yarnrc theia/.yarnrc
-
-RUN cd theia && \
-    yarn --cache-folder ./ycache && \
-    rm -rf ./ycache
 
 RUN cd theia/apps/ide && \
     yarn --cache-folder ./ycache && \
@@ -98,8 +88,7 @@ RUN cd theia/apps/ide && \
     rm -rf ./ycache
 
 COPY resources/.bashrc /root/.bashrc
-RUN echo 'export PATH="$PATH:/home/developer/.cargo/bin"' >> /root/.profile && \
-    echo 'export PATH="$PATH:/home/developer/git/wabt/bin"' >> /home/developer/.bashrc
+RUN echo 'export PATH="$PATH:/home/developer/.cargo/bin"' >> /root/.profile
 
 USER developer
 

@@ -108,6 +108,7 @@ fi
 
 export PATH="$PATH:/home/developer/.local/bin"
 export PATH="$PATH:/home/developer/.cargo/bin"
+export PATH="$PATH:/home/developer/git/wabt/bin"
 
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
