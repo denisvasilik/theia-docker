@@ -41,11 +41,21 @@ RUN apt-get update && \
                        wget \
                        fonts-powerline \
                        apt-transport-https \
-                       openjdk-8-jdk && \
+                       openjdk-8-jdk \
+                       cmake && \
     apt-get clean && \
     rm -rf /var/cache/apt/* && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/*
+
+# Install WABT
+RUN mkdir -p /home/developer/git && \
+    cd /home/developer/git && \
+    git clone --recursive https://github.com/WebAssembly/wabt && \
+    mkdir -p /home/developer/git/wabt/build && \
+    cd  /home/developer/git/wabt/build && \
+    cmake .. && \
+    cmake --build .
 
 # Install Python related packages
 RUN pip install \
@@ -88,7 +98,8 @@ RUN cd theia/apps/ide && \
     rm -rf ./ycache
 
 COPY resources/.bashrc /root/.bashrc
-RUN echo 'export PATH="$PATH:/home/developer/.cargo/bin"' >> /root/.profile
+RUN echo 'export PATH="$PATH:/home/developer/.cargo/bin"' >> /root/.profile && \
+    echo 'export PATH="$PATH:/home/developer/git/wabt/bin"' >> /home/developer/.bashrc
 
 USER developer
 
