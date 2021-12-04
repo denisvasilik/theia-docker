@@ -1,6 +1,23 @@
-ARG ARCH='amd64'
+ARG NODE_VERSION=12.18.3
 
-FROM ${ARCH}/ubuntu:18.04
+FROM node:${NODE_VERSION}
+RUN apt-get update && apt-get install -y libsecret-1-dev
+ARG version=latest
+WORKDIR /home/theia
+ADD $version.package.json ./package.json
+ARG GITHUB_TOKEN
+RUN yarn --pure-lockfile && \
+    NODE_OPTIONS="--max_old_space_size=4096" yarn theia build && \
+    yarn theia download:plugins && \
+    yarn --production && \
+    yarn autoclean --init && \
+    echo *.ts >> .yarnclean && \
+    echo *.ts.map >> .yarnclean && \
+    echo *.spec.* >> .yarnclean && \
+    yarn autoclean --force && \
+    yarn cache clean
+
+FROM amd64/ubuntu:18.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -13,11 +30,6 @@ RUN apt-get update && \
 # Install .NET core runtime
 COPY resources/install_dotnet.sh install_dotnet.sh
 RUN ./install_dotnet.sh ${ARCH}
-
-# Install Yarn
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-    apt update && apt install yarn
 
 # Install additional packages
 RUN apt-get update && \
@@ -46,15 +58,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/*
 
-# Install WABT
-RUN mkdir -p /home/developer/git && \
-    cd /home/developer/git && \
-    git clone --recursive https://github.com/WebAssembly/wabt && \
-    mkdir -p /home/developer/git/wabt/build && \
-    cd  /home/developer/git/wabt/build && \
-    cmake .. && \
-    cmake --build .
-
 # Install Python related packages
 RUN pip install \
     python-language-server \
@@ -77,17 +80,6 @@ WORKDIR /home/developer
 COPY resources/sudoers /etc/sudoers
 RUN chmod 0440 /etc/sudoers && chown 0:0 /etc/sudoers
 
-COPY apps theia/apps
-COPY resources/.yarnrc theia/app/.yarnrc
-COPY resources/package.json theia/package.json
-COPY resources/.yarnrc theia/.yarnrc
-
-RUN cd theia/apps/ide && \
-    yarn --cache-folder ./ycache && \
-    yarn theia build ; \
-    yarn theia download:plugins && \
-    rm -rf ./ycache
-
 COPY resources/.bashrc /root/.bashrc
 RUN echo 'export PATH="$PATH:/home/developer/.cargo/bin"' >> /root/.profile
 
@@ -107,7 +99,7 @@ RUN curl https://sh.rustup.rs -o install_rustup.sh && \
 # Prepare directory structure
 RUN mkdir -p .fonts && \
     mkdir -p .theia && \
-    mkdir -p workspace
+    mkdir -p git
 
 # Add JetBrains Mono
 RUN cd .fonts && \
@@ -122,8 +114,11 @@ COPY resources/.theia/settings.json .theia/settings.json
 # Activate powerline
 COPY resources/.bashrc .bashrc
 
-WORKDIR /home/developer/theia/apps/ide
+ENV HOME /home/developer
+WORKDIR /home/developer
+COPY --from=0 /home/theia /home/developer
 EXPOSE 3000
 ENV SHELL=/bin/bash \
-    THEIA_DEFAULT_PLUGINS=local-dir:/home/developer/theia/apps/ide/plugins
-ENTRYPOINT [ "yarn", "start", "/home/developer/workspace", "--hostname=0.0.0.0" ]
+    THEIA_DEFAULT_PLUGINS=local-dir:/home/developer/plugins
+ENV USE_LOCAL_GIT true
+ENTRYPOINT [ "node", "/home/developer/src-gen/backend/main.js", "/home/git", "--hostname=0.0.0.0" ]
