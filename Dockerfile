@@ -28,6 +28,7 @@ RUN apt-get update && \
                        python-pip \
                        libx11-dev \
                        libxkbfile-dev \
+                       libsecret-1-0 \
                        vim \
                        python3-pip \
                        libpng-dev \

@@ -10,4 +10,8 @@ clean:
 	docker image rm ${DOCKER_IMAGE_TAG}
 
 run:
-	docker run -it --rm -p 3000:3000 ${DOCKER_IMAGE_TAG}
+	docker run --hostname eccelerators -it --rm -p 3000:3000 ${DOCKER_IMAGE_TAG}
+
+debug:
+	docker run --user root -it --rm ${DOCKER_IMAGE_TAG} /bin/bash
+
