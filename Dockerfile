@@ -1,6 +1,7 @@
 ARG NODE_VERSION=12.18.3
 
 FROM node:${NODE_VERSION}
+RUN apt-get update && apt-get install -y libsecret-1-dev
 ARG version=latest
 WORKDIR /home/theia
 ADD $version.package.json ./package.json
