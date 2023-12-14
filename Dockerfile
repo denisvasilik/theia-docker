@@ -1,4 +1,4 @@
-ARG NODE_VERSION=12.18.3
+ARG NODE_VERSION=18.17.0
 
 FROM node:${NODE_VERSION}
 RUN apt-get update && apt-get install -y libsecret-1-dev
@@ -17,15 +17,21 @@ RUN yarn --pure-lockfile && \
     yarn autoclean --force && \
     yarn cache clean
 
-FROM amd64/ubuntu:18.04
+FROM amd64/ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV NODE_VERSION=18
 
 # Install NodeJS
 RUN apt-get update && \
-    apt-get install -y curl && \
-    curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
-    apt-get install -y nodejs
+    apt-get install -y ca-certificates curl gnupg && \
+    mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+
+RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_VERSION}.x nodistro main" | \
+    tee /etc/apt/sources.list.d/nodesource.list && \
+    apt-get update && \
+    apt-get install nodejs -y
 
 # Install .NET core runtime
 COPY resources/install_dotnet.sh install_dotnet.sh
@@ -35,9 +41,8 @@ RUN ./install_dotnet.sh ${ARCH}
 RUN apt-get update && \
     apt-get install -y git pkg-config && \
     apt-get update && \
-    apt-get install -y python \
-                       python-dev \
-                       python-pip \
+    apt-get install -y python3 \
+                       python3-pip \
                        libx11-dev \
                        libxkbfile-dev \
                        libsecret-1-0 \
@@ -121,4 +126,5 @@ EXPOSE 3000
 ENV SHELL=/bin/bash \
     THEIA_DEFAULT_PLUGINS=local-dir:/home/developer/plugins
 ENV USE_LOCAL_GIT true
+# node /home/developer/src-gen/backend/main.js /home/git --hostname=0.0.0.0
 ENTRYPOINT [ "node", "/home/developer/src-gen/backend/main.js", "/home/git", "--hostname=0.0.0.0" ]

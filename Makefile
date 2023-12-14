@@ -12,4 +12,5 @@ run:
 
 debug:
 	docker run --user root -it --rm ${DOCKER_IMAGE_TAG} /bin/bash
+	#docker run -it --rm ${DOCKER_IMAGE_TAG} /bin/bash
 
